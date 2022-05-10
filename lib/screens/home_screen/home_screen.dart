@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/course_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../widgets/app_bar_button.dart';
 import '../../themes/theme.dart';
@@ -15,18 +14,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   void loadData() async {
-    final courseProvider = Provider.of<CourseProvider>(
-      context,
-      listen: false,
-    );
-
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
     );
 
-    await courseProvider.loadCourses();
-    await userProvider.loadUser(courseProvider.courses);
+    await userProvider.loadUser();
   }
 
   @override
