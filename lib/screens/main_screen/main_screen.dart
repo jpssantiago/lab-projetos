@@ -29,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
     BottomNavigationBar _bottomNavigationBar() {
       BottomNavigationBarItem _home() {
         return const BottomNavigationBarItem(
-          icon: Icon(Icons.home, size: 30),
+          icon: Icon(Icons.school, size: 30),
           label: '',
         );
       }
