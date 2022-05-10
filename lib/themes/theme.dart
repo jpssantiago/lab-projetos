@@ -18,7 +18,10 @@ ThemeData getLightTheme = ThemeData.light().copyWith(
   ),
   scaffoldBackgroundColor: kIce,
   primaryColor: kPrimary,
-  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
     selectedItemColor: kPrimary,
+    unselectedIconTheme: IconThemeData(
+      color: kSecondaryText.withOpacity(.4),
+    ),
   ),
 );

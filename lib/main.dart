@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
+import './providers/course_provider.dart';
+import './providers/user_provider.dart';
 import './screens/main_screen/main_screen.dart';
 import './themes/theme.dart';
 
@@ -18,13 +21,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Lab. Projetos',
-      routes: {
-        'main': (context) => const MainScreen(),
-      },
-      initialRoute: 'main',
-      theme: getLightTheme,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CourseProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+      ],
+      child: MaterialApp(
+        title: 'Lab. Projetos',
+        routes: {
+          'main': (context) => const MainScreen(),
+        },
+        initialRoute: 'main',
+        theme: getLightTheme,
+      ),
     );
   }
 }

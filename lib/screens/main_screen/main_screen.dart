@@ -27,7 +27,7 @@ class _MainScreenState extends State<MainScreen> {
     ];
 
     BottomNavigationBar _bottomNavigationBar() {
-      BottomNavigationBarItem _home() {
+      BottomNavigationBarItem _learn() {
         return const BottomNavigationBarItem(
           icon: Icon(Icons.school, size: 30),
           label: '',
@@ -50,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
 
       return BottomNavigationBar(
         items: [
-          _home(),
+          _learn(),
           _courses(),
           _profile(),
         ],
