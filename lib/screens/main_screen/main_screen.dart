@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../home_screen/home_screen.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -19,23 +21,47 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
-      Container(color: Colors.white),
+      const HomeScreen(),
       Container(color: Colors.grey),
+      Container(color: Colors.grey.withOpacity(.2)),
     ];
 
     BottomNavigationBar _bottomNavigationBar() {
+      BottomNavigationBarItem _home() {
+        return const BottomNavigationBarItem(
+          icon: Icon(Icons.home, size: 30),
+          label: '',
+        );
+      }
+
+      BottomNavigationBarItem _courses() {
+        return const BottomNavigationBarItem(
+          icon: Icon(Icons.bookmark, size: 30),
+          label: '',
+        );
+      }
+
+      BottomNavigationBarItem _profile() {
+        return const BottomNavigationBarItem(
+          icon: Icon(Icons.person, size: 30),
+          label: '',
+        );
+      }
+
       return BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Início'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
+        items: [
+          _home(),
+          _courses(),
+          _profile(),
         ],
         currentIndex: currentIndex,
         onTap: setCurrentIndex,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Lab. Projetos')),
       body: _screens[currentIndex],
       bottomNavigationBar: _bottomNavigationBar(),
     );

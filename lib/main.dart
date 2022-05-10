@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-import 'package:app/screens/main_screen/main_screen.dart';
+import './screens/main_screen/main_screen.dart';
+import './themes/theme.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.white, // navigation bar color
+    statusBarColor: Colors.white, // status bar color
+  ));
+
   runApp(const MyApp());
 }
 
@@ -12,10 +19,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Lab. Projetos',
       routes: {
         'main': (context) => const MainScreen(),
       },
       initialRoute: 'main',
+      theme: getLightTheme,
     );
   }
 }
