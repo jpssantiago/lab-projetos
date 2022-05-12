@@ -13,6 +13,12 @@ class UserProvider with ChangeNotifier {
   CourseModel? get selectedCourse => _selectedCourse;
   UserModel? get user => _user;
 
+  void setSelectedCourse(CourseModel course) {
+    _selectedCourse = course;
+
+    notifyListeners();
+  }
+
   Future<void> loadUser() async {
     String id = "3ewI769MYNLYb1KHEanR"; // TODO: Receber ID como parâmetro.
 

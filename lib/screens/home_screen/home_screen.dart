@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/user_provider.dart';
-import '../../widgets/app_bar_button.dart';
+import '../../widgets/app_bar_button/app_bar_button.dart';
+import '../../widgets/select_course_bottom_sheet/select_course_bottom_sheet.dart';
 import '../../themes/theme.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -58,7 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           onPressed: () {
             if (loading) return;
-            // TODO: Abrir bottom sheet para escolher curso.
+
+            showSelectCourseBottomSheet(context: context);
           },
         );
       }
