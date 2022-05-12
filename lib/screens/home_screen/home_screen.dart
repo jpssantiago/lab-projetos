@@ -1,3 +1,5 @@
+import 'package:app/models/course_module_model.dart';
+import 'package:app/widgets/module_item/module_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -78,7 +80,20 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     Widget _listView() {
-      return ListView();
+      if (userProvider.selectedCourse == null) {
+        return Container();
+      }
+
+      return ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        itemCount: userProvider.selectedCourse?.modules.length,
+        itemBuilder: (context, index) {
+          return ModuleItem(
+            module: userProvider.selectedCourse!.modules[index],
+            locked: index > 0,
+          );
+        },
+      );
     }
 
     return Scaffold(
