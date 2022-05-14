@@ -16,7 +16,10 @@ class UserModel {
   double getCourseProgress(CourseModel course) {
     for (UserCourseModel courseProgress in courses) {
       if (courseProgress.course.id == course.id) {
-        return 50; // TODO: Pegar qtd de modulos.
+        int completedModules = courseProgress.completedModules.length;
+        int totalModules = course.modules.length;
+
+        return (completedModules * 100) / totalModules;
       }
     }
 

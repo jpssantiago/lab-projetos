@@ -1,5 +1,3 @@
-import 'package:app/models/course_module_model.dart';
-import 'package:app/widgets/module_item/module_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,6 +5,7 @@ import '../../providers/user_provider.dart';
 import '../../widgets/app_bar_button/app_bar_button.dart';
 import '../../widgets/select_course_bottom_sheet/select_course_bottom_sheet.dart';
 import '../../themes/theme.dart';
+import '../../widgets/module_item/module_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
