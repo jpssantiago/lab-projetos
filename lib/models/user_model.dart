@@ -7,16 +7,16 @@ import 'user_course_progress.dart';
 class UserModel {
   String id;
   String name;
-  List<UserCourseProgress> progress;
+  List<UserCourseProgress> myCourses;
 
   UserModel({
     required this.id,
     required this.name,
-    required this.progress,
+    required this.myCourses,
   });
 
   bool hasStartedCourse(CourseModel course) {
-    for (UserCourseProgress c in progress) {
+    for (UserCourseProgress c in myCourses) {
       if (c.course.id == course.id) {
         return true;
       }
@@ -35,7 +35,9 @@ class UserModel {
 
   double getModuleProgress(CourseModel course, CourseModuleModel module) {
     if (hasStartedCourse(course)) {
-      return Random().nextDouble();
+      if (module.lessons.isNotEmpty) {
+        return Random().nextDouble();
+      }
     }
 
     return 0;
@@ -62,7 +64,7 @@ class UserModel {
     return UserModel(
       id: id,
       name: map['name'],
-      progress: await getUserCourses(map['progress']),
+      myCourses: await getUserCourses(map['my_courses']),
     );
   }
 }
