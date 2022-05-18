@@ -7,6 +7,7 @@ import './firebase_options.dart';
 import './providers/course_provider.dart';
 import './providers/user_provider.dart';
 import './screens/main_screen/main_screen.dart';
+import './screens/module_screen/module_screen.dart';
 import './themes/theme.dart';
 
 void main() async {
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         title: 'Lab. Projetos',
         routes: {
           'main': (context) => const MainScreen(),
+          'module': (context) => const ModuleScreen(),
         },
         initialRoute: 'main',
         theme: getLightTheme,

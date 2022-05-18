@@ -89,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
         itemBuilder: (context, index) {
           return ModuleItem(
             module: userProvider.selectedCourse!.modules[index],
+            course: userProvider.selectedCourse!,
             locked: index > 0,
           );
         },
