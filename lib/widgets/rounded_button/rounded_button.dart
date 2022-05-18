@@ -28,6 +28,7 @@ class RoundedButton extends StatelessWidget {
                 color: kWhite,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
+                letterSpacing: 1.1,
               ),
             ),
           ),
