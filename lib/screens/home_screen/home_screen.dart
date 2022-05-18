@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/course_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../widgets/app_bar_button/app_bar_button.dart';
 import '../../widgets/select_course_bottom_sheet/select_course_bottom_sheet.dart';
@@ -62,16 +63,29 @@ class HomeScreen extends StatelessWidget {
         return Container();
       }
 
-      return ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemCount: userProvider.selectedCourse?.modules.length,
-        itemBuilder: (context, index) {
-          return ModuleItem(
-            module: userProvider.selectedCourse!.modules[index],
-            course: userProvider.selectedCourse!,
-            locked: index > 0,
-          );
-        },
+      Future<void> onRefresh() async {
+        final courseProvider = Provider.of<CourseProvider>(
+          context,
+          listen: false,
+        );
+
+        await courseProvider.loadCourses();
+        await userProvider.loadUser(courseProvider.courses);
+      }
+
+      return RefreshIndicator(
+        onRefresh: onRefresh,
+        child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemCount: userProvider.selectedCourse?.modules.length,
+          itemBuilder: (context, index) {
+            return ModuleItem(
+              module: userProvider.selectedCourse!.modules[index],
+              course: userProvider.selectedCourse!,
+              locked: index > 0,
+            );
+          },
+        ),
       );
     }
 
