@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/course_provider.dart';
+import '../../providers/user_provider.dart';
 import '../home_screen/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -16,6 +19,29 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       currentIndex = index;
     });
+  }
+
+  void loadData() async {
+    final courseProvider = Provider.of<CourseProvider>(
+      context,
+      listen: false,
+    );
+
+    await courseProvider.loadCourses();
+
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    await userProvider.loadUser(courseProvider.courses);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadData();
   }
 
   @override

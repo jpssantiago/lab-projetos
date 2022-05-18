@@ -7,29 +7,8 @@ import '../../widgets/select_course_bottom_sheet/select_course_bottom_sheet.dart
 import '../../themes/theme.dart';
 import '../../widgets/module_item/module_item.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  void loadData() async {
-    final userProvider = Provider.of<UserProvider>(
-      context,
-      listen: false,
-    );
-
-    await userProvider.loadUser();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    loadData();
-  }
 
   @override
   Widget build(BuildContext context) {

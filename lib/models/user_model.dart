@@ -1,39 +1,54 @@
-import 'package:app/models/course_model.dart';
+import 'dart:math';
 
-import './user_course_model.dart';
+import 'course_model.dart';
+import 'course_module_model.dart';
+import 'user_course_progress.dart';
 
 class UserModel {
   String id;
   String name;
-  List<UserCourseModel> courses;
+  List<UserCourseProgress> progress;
 
   UserModel({
     required this.id,
     required this.name,
-    required this.courses,
+    required this.progress,
   });
 
-  double getCourseProgress(CourseModel course) {
-    for (UserCourseModel courseProgress in courses) {
-      if (courseProgress.course.id == course.id) {
-        int completedModules = courseProgress.completedModules.length;
-        int totalModules = course.modules.length;
-
-        return (completedModules * 100) / totalModules;
+  bool hasStartedCourse(CourseModel course) {
+    for (UserCourseProgress c in progress) {
+      if (c.course.id == course.id) {
+        return true;
       }
+    }
+
+    return false;
+  }
+
+  double getCourseProgress(CourseModel course) {
+    if (hasStartedCourse(course)) {
+      return Random().nextDouble() * 100;
     }
 
     return 0;
   }
 
-  static Future<List<UserCourseModel>> getUserCourses(
+  double getModuleProgress(CourseModel course, CourseModuleModel module) {
+    if (hasStartedCourse(course)) {
+      return Random().nextDouble();
+    }
+
+    return 0;
+  }
+
+  static Future<List<UserCourseProgress>> getUserCourses(
     List<dynamic> list,
   ) async {
-    List<UserCourseModel> courses = [];
+    List<UserCourseProgress> courses = [];
 
     for (var map in list) {
       courses.add(
-        await UserCourseModel.fromMap(map),
+        await UserCourseProgress.fromMap(map),
       );
     }
 
@@ -47,7 +62,7 @@ class UserModel {
     return UserModel(
       id: id,
       name: map['name'],
-      courses: await getUserCourses(map['courses']),
+      progress: await getUserCourses(map['progress']),
     );
   }
 }

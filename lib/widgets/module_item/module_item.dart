@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/course_model.dart';
 import '../../models/course_module_model.dart';
+import '../../providers/user_provider.dart';
 import '../../themes/theme.dart';
 
 class ModuleItem extends StatelessWidget {
@@ -18,6 +20,11 @@ class ModuleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
     void handlePress() {
       Navigator.of(context).pushNamed('module', arguments: {
         'module': module,
@@ -28,7 +35,7 @@ class ModuleItem extends StatelessWidget {
     Widget _progress() {
       Widget _progressIndicator() {
         return CircularProgressIndicator(
-          value: locked ? 0 : .38,
+          value: userProvider.user?.getModuleProgress(course, module),
           backgroundColor: kSecondaryText.withOpacity(.1),
           strokeWidth: 8,
           color: kPrimary,

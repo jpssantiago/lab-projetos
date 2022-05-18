@@ -46,7 +46,7 @@ class ModuleScreen extends StatelessWidget {
             Text('Curso: ${course.name}'),
             Text('Módulo: ${module.name}'),
             const Text('Lições concluídas: 0'),
-            const Text('Lições totais: 0'),
+            Text('Lições totais: ${module.lessons.length}'),
           ],
         ),
       ),
