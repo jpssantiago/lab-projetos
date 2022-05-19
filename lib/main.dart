@@ -9,6 +9,7 @@ import './providers/user_provider.dart';
 import './screens/main_screen/main_screen.dart';
 import './screens/module_screen/module_screen.dart';
 import './themes/theme.dart';
+import 'screens/module_completed_screen/module_completed_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         routes: {
           'main': (context) => const MainScreen(),
           'module': (context) => const ModuleScreen(),
+          'module_completed': (context) => const ModuleCompletedScreen(),
         },
         initialRoute: 'main',
         theme: getLightTheme,

@@ -26,6 +26,8 @@ class ModuleItem extends StatelessWidget {
     );
 
     void handlePress() {
+      if (module.lessons.isEmpty) return; // TODO: Adicionar mensagem.
+
       Navigator.of(context).pushNamed('module', arguments: {
         'module': module,
         'course': course,
