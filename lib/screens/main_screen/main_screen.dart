@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../providers/course_provider.dart';
 import '../../providers/user_provider.dart';
 import '../home_screen/home_screen.dart';
+import '../profile_screen/profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -49,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
     final List<Widget> _screens = [
       const HomeScreen(),
       Container(color: Colors.grey),
-      Container(color: Colors.grey.withOpacity(.2)),
+      const ProfileScreen(),
     ];
 
     BottomNavigationBar _bottomNavigationBar() {
