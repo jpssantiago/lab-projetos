@@ -1,4 +1,5 @@
 import 'package:app/widgets/alert_dialog/alert_dialog.dart';
+import 'package:app/widgets/edit_avatar_bottom_sheet/edit_avatar_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,17 +22,22 @@ class ProfileScreen extends StatelessWidget {
 
     Widget _header() {
       Widget _avatar() {
-        return Container(
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(
-            color: kIce,
-            borderRadius: BorderRadius.circular(50),
-            border: Border.all(color: kPrimary),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(50),
-            child: Image.network('https://github.com/jpssantiago.png'),
+        return GestureDetector(
+          onTap: () {
+            showEditAvatarBottomSheet(context: context);
+          },
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              color: kIce,
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(color: kPrimary),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Image.network('https://github.com/jpssantiago.png'),
+            ),
           ),
         );
       }
@@ -40,12 +46,27 @@ class ProfileScreen extends StatelessWidget {
         return Text(
           userProvider.user?.name ?? '',
           style: const TextStyle(
-            fontSize: 22,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             color: kText,
           ),
           textAlign: TextAlign.center,
           overflow: TextOverflow.ellipsis,
+        );
+      }
+
+      Widget _editAvatar() {
+        return GestureDetector(
+          onTap: () {
+            showEditAvatarBottomSheet(context: context);
+          },
+          child: const Text(
+            'Editar foto de perfil',
+            style: TextStyle(
+              color: kPrimary,
+              fontSize: 14,
+            ),
+          ),
         );
       }
 
@@ -57,6 +78,8 @@ class ProfileScreen extends StatelessWidget {
             _avatar(),
             const SizedBox(height: 20),
             _name(),
+            const SizedBox(height: 10),
+            _editAvatar(),
           ],
         ),
       );
