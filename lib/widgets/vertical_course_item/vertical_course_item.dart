@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../models/course_model.dart';
 import '../../themes/theme.dart';
@@ -32,8 +33,8 @@ class VerticalCourseItem extends StatelessWidget {
           );
         }
 
-        return Image.network(
-          course!.logo,
+        return CachedNetworkImage(
+          imageUrl: course!.logo,
           width: 24,
           height: 24,
         );

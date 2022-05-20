@@ -1,21 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/user_provider.dart';
+import '../../providers/auth_provider.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
 
   @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    if (authProvider.hasUser()) {
+      goToMain();
+    }
+  }
+
+  void goToMain() async {
+    await Future.delayed(const Duration(seconds: 0), () {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        'main',
+        (route) => false,
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
       body: Center(
         child: TextButton(
           child: const Text('Logar com google'),
           onPressed: () async {
-            await userProvider.signInWithGoogle();
+            final response = await authProvider.signInWithGoogle();
+
+            if (response.authenticated) {
+              goToMain();
+            } else {
+              // [snack-bar] erro: response.error
+              // TODO: Widget de snackbar.
+            }
           },
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/auth_provider.dart';
 import '../../providers/course_provider.dart';
 import '../../providers/user_provider.dart';
 import '../home_screen/home_screen.dart';
@@ -23,6 +24,18 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void loadData() async {
+    final authProvider = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    );
+
+    if (!authProvider.hasUser()) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        'welcome',
+        (route) => false,
+      );
+    }
+
     final courseProvider = Provider.of<CourseProvider>(
       context,
       listen: false,
@@ -35,7 +48,10 @@ class _MainScreenState extends State<MainScreen> {
       listen: false,
     );
 
-    await userProvider.loadUser(courseProvider.courses);
+    await userProvider.loadUser(
+      id: authProvider.id!,
+      courses: courseProvider.courses,
+    );
   }
 
   @override

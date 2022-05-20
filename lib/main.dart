@@ -9,6 +9,7 @@ import './providers/user_provider.dart';
 import './screens/main_screen/main_screen.dart';
 import './screens/module_screen/module_screen.dart';
 import './themes/theme.dart';
+import 'providers/auth_provider.dart';
 import 'screens/module_completed_screen/module_completed_screen.dart';
 import 'screens/welcome_screen/welcome_screen.dart';
 
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => CourseProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
       ],
       child: MaterialApp(
         title: 'Lab. Projetos',
@@ -45,7 +47,7 @@ class MyApp extends StatelessWidget {
           'module': (context) => const ModuleScreen(),
           'module_completed': (context) => const ModuleCompletedScreen(),
         },
-        initialRoute: 'main',
+        initialRoute: 'welcome',
         theme: getLightTheme,
       ),
     );
