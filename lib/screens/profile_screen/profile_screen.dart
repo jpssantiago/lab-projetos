@@ -172,6 +172,13 @@ class ProfileScreen extends StatelessWidget {
                   'Você voltará para a tela de autenticação e precisará entrar com uma conta para continuar utilizando o aplicativo.',
               onAccept: () {
                 Navigator.of(context).pop();
+
+                userProvider.signOut();
+
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  'welcome',
+                  (route) => false,
+                );
               },
             );
           },
