@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/user_provider.dart';
 import '../bottom_sheet/bottom_sheet.dart';
 import '../filled_button/filled_button.dart';
 import '../filled_text_field/filled_text_field.dart';
@@ -15,11 +17,12 @@ class EditNameBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
+    final userProvider = Provider.of<UserProvider>(context);
 
     Widget _input() {
       return FilledTextField(
         controller: controller,
-        hint: 'João Pedro',
+        hint: userProvider.user?.name,
       );
     }
 

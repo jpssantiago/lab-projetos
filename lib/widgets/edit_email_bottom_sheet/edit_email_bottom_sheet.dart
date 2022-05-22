@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/auth_provider.dart';
 import '../bottom_sheet/bottom_sheet.dart';
 import '../filled_button/filled_button.dart';
 import '../filled_text_field/filled_text_field.dart';
@@ -15,11 +17,12 @@ class EditEmailBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
+    final authProvider = Provider.of<AuthProvider>(context);
 
     Widget _input() {
       return FilledTextField(
         controller: controller,
-        hint: 'jps_santiago@outlook.com',
+        hint: authProvider.email,
       );
     }
 
