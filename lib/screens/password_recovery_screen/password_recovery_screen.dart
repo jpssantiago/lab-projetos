@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/auth_provider.dart';
 import '../../themes/theme.dart';
 import '../../widgets/filled_button/filled_button.dart';
 import '../../widgets/filled_text_field/filled_text_field.dart';
+import '../../widgets/snack_bar/snack_bar.dart';
 
 class PasswordRecoveryScreen extends StatefulWidget {
   const PasswordRecoveryScreen({Key? key}) : super(key: key);
@@ -24,6 +27,8 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     AppBar _appBar() {
       return AppBar(
         title: const Text('Redefinir senha'),
@@ -64,10 +69,24 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
         text: 'Continuar',
         loading: loading,
         onPressed: () async {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            'password_recovery_success',
-            (route) => false,
-          );
+          String email = emailController.text;
+          if (email.isEmpty) {
+            return; // Error
+          }
+
+          setLoading(true);
+
+          final response = await authProvider.sendPasswordRecoveryEmail(email);
+          if (response.sent) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              'password_recovery_success',
+              (route) => false,
+            );
+          } else {
+            sendSnackBar(context: context, message: response.error ?? '');
+          }
+
+          setLoading(false);
         },
       );
     }

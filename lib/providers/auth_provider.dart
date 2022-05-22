@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../models/google_signin_response.dart';
+import '../models/password_recovery_response.dart';
 import '../models/sign_in_response.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -99,6 +100,20 @@ class AuthProvider with ChangeNotifier {
       authenticated: false,
       error: '',
     );
+  }
+
+  Future<PasswordRecoveryResponse> sendPasswordRecoveryEmail(
+    String email,
+  ) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+
+      return PasswordRecoveryResponse(sent: true);
+    } on FirebaseAuthException catch (e) {
+      return PasswordRecoveryResponse(sent: false, error: e.code);
+    } catch (e) {
+      return PasswordRecoveryResponse(sent: false, error: e.toString());
+    }
   }
 
   Future<void> signOut() async {
