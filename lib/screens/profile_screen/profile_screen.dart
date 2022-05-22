@@ -24,10 +24,24 @@ class ProfileScreen extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context);
 
     Widget _header() {
-      String picture =
-          userProvider.user?.picture ?? 'https://github.com/rocketseat.png';
+      bool hasPicture = userProvider.user?.picture != null;
 
       Widget _avatar() {
+        Widget _picture() {
+          return CachedNetworkImage(
+            imageUrl: userProvider.user!.picture!,
+            fit: BoxFit.cover,
+          );
+        }
+
+        Widget _noPicture() {
+          return const Icon(
+            Icons.person,
+            size: 48,
+            color: kPrimary,
+          );
+        }
+
         return GestureDetector(
           onTap: () {
             showEditAvatarBottomSheet(context: context);
@@ -42,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
-              child: CachedNetworkImage(imageUrl: picture, fit: BoxFit.cover),
+              child: hasPicture ? _picture() : _noPicture(),
             ),
           ),
         );

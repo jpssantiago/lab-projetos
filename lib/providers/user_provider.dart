@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../models/course_model.dart';
+import '../models/edit_avatar_response.dart';
 import '../models/user_model.dart';
 
 class UserProvider with ChangeNotifier {
   final FirebaseFirestore _database = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   CourseModel? _selectedCourse;
   UserModel? _user;
@@ -15,6 +20,46 @@ class UserProvider with ChangeNotifier {
 
   void setSelectedCourse(CourseModel course) {
     _selectedCourse = course;
+
+    notifyListeners();
+  }
+
+  Future<EditAvatarResponse> setPicture(String path) async {
+    File file = File(path);
+
+    try {
+      final response = await _storage.ref('avatars/${_user!.id}').putFile(file);
+
+      String url = await response.ref.getDownloadURL();
+
+      await _database.collection('users').doc(_user!.id).update({
+        'picture': url,
+      });
+
+      _user!.picture = url;
+
+      notifyListeners();
+
+      return EditAvatarResponse(edited: true);
+    } on FirebaseException catch (_) {
+      return EditAvatarResponse(
+        edited: true,
+        error: 'Não foi possível alterar a foto de perfil.',
+      );
+    } catch (_) {
+      return EditAvatarResponse(
+        edited: true,
+        error: 'Não foi possível alterar a foto de perfil.',
+      );
+    }
+  }
+
+  Future<void> removePicture() async {
+    await _database.collection('users').doc(_user?.id).update({
+      'picture': null,
+    });
+
+    _user!.picture = null;
 
     notifyListeners();
   }
