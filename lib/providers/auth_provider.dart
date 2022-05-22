@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../models/google_signin_response.dart';
 import '../models/password_recovery_response.dart';
 import '../models/sign_in_response.dart';
+import '../models/sign_up_response.dart';
 
 class AuthProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -24,12 +25,13 @@ class AuthProvider with ChangeNotifier {
     return _id != null;
   }
 
-  Future<void> createAccountInDatabase(UserCredential credential) async {
+  Future<void> createAccountInDatabase(UserCredential credential,
+      {String? name}) async {
     final profile = credential.additionalUserInfo?.profile;
 
     _database.collection('users').doc(credential.user!.uid).set({
-      'name': profile!['name'],
-      'picture': profile['picture'],
+      'name': profile?['name'] ?? name ?? '',
+      'picture': profile!['picture'],
       'my_courses': [],
     });
   }
@@ -42,7 +44,7 @@ class AuthProvider with ChangeNotifier {
       );
 
       if (credential.user == null) {
-        return SignInResponse(authenticated: false, error: 'user-not-found');
+        return SignInResponse(authenticated: false, error: 'user-null');
       }
 
       _id = credential.user!.uid;
@@ -74,10 +76,7 @@ class AuthProvider with ChangeNotifier {
         );
 
         if (userCredential.user == null) {
-          return GoogleSignInResponse(
-            authenticated: false,
-            error: 'user-not-found',
-          );
+          return GoogleSignInResponse(authenticated: false, error: 'user-null');
         }
 
         _id = userCredential.user!.uid;
@@ -100,6 +99,31 @@ class AuthProvider with ChangeNotifier {
       authenticated: false,
       error: '',
     );
+  }
+
+  Future<SignUpResponse> signUp(
+    String name,
+    String email,
+    String password,
+  ) async {
+    try {
+      final credential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (credential.user == null) {
+        return SignUpResponse(authenticated: false, error: 'user-null');
+      }
+
+      await createAccountInDatabase(credential, name: name);
+
+      return SignUpResponse(authenticated: true);
+    } on FirebaseAuthException catch (e) {
+      return SignUpResponse(authenticated: false, error: e.code);
+    } catch (e) {
+      return SignUpResponse(authenticated: false, error: e.toString());
+    }
   }
 
   Future<PasswordRecoveryResponse> sendPasswordRecoveryEmail(

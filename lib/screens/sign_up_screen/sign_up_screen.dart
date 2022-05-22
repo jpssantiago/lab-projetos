@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/auth_provider.dart';
 import '../../themes/theme.dart';
 import '../../widgets/filled_button/filled_button.dart';
 import '../../widgets/filled_text_field/filled_text_field.dart';
 import '../../widgets/show_password_text_button/show_password_text_button.dart';
+import '../../widgets/snack_bar/snack_bar.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -57,6 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final authProvider = Provider.of<AuthProvider>(context);
 
     AppBar _appBar() {
       return AppBar(
@@ -142,7 +146,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return FilledButton(
         text: 'Criar conta',
         loading: loading,
-        onPressed: () async {},
+        onPressed: () async {
+          String name = nameController.text;
+          String email = emailController.text;
+          String password = passwordController.text;
+          String confirmation = passwordConfController.text;
+
+          if (name.isEmpty ||
+              email.isEmpty ||
+              password.isEmpty ||
+              confirmation.isEmpty) {
+            return; // Error
+          }
+
+          if (!lengthRequirement || !confirmationRequirement) {
+            return; // Error;
+          }
+
+          setLoading(true);
+
+          final response = await authProvider.signUp(name, email, password);
+          if (response.authenticated) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              'main',
+              (route) => false,
+            );
+          } else {
+            sendSnackBar(context: context, message: response.error ?? '');
+          }
+
+          setLoading(false);
+        },
       );
     }
 
