@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../models/course_model.dart';
 import '../../themes/theme.dart';
@@ -19,8 +20,8 @@ class ProfileCourseProgress extends StatelessWidget {
     Widget _image() {
       return ClipRRect(
         borderRadius: BorderRadius.circular(50),
-        child: Image.network(
-          course.logo,
+        child: CachedNetworkImage(
+          imageUrl: course.logo,
           width: 30,
           height: 30,
         ),

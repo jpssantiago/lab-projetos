@@ -19,10 +19,10 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadUser(List<CourseModel> courses) async {
-    String id = "L8sUT5EftYM5cDSmYn4pdmrFE5z1";
-    // TODO: Receber ID como parâmetro.
-
+  Future<void> loadUser({
+    required String id,
+    required List<CourseModel> courses,
+  }) async {
     final doc = await _database.collection('users').doc(id).get();
     _user = await UserModel.fromMap(id: id, map: doc.data() ?? {});
 

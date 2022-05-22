@@ -8,11 +8,13 @@ class UserModel {
   String id;
   String name;
   List<UserCourseProgress> myCourses;
+  String? picture;
 
   UserModel({
     required this.id,
     required this.name,
     required this.myCourses,
+    this.picture,
   });
 
   bool hasStartedCourse(CourseModel course) {
@@ -65,6 +67,7 @@ class UserModel {
       id: id,
       name: map['name'],
       myCourses: await getUserCourses(map['my_courses']),
+      picture: map['picture'],
     );
   }
 }

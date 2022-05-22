@@ -70,7 +70,10 @@ class HomeScreen extends StatelessWidget {
         );
 
         await courseProvider.loadCourses();
-        await userProvider.loadUser(courseProvider.courses);
+        await userProvider.loadUser(
+          id: userProvider.user!.id,
+          courses: courseProvider.courses,
+        );
       }
 
       return RefreshIndicator(

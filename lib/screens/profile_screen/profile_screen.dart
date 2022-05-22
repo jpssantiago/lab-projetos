@@ -1,12 +1,14 @@
-import 'package:app/widgets/alert_dialog/alert_dialog.dart';
-import 'package:app/widgets/edit_avatar_bottom_sheet/edit_avatar_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../models/course_model.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/course_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../themes/theme.dart';
+import '../../widgets/alert_dialog/alert_dialog.dart';
+import '../../widgets/edit_avatar_bottom_sheet/edit_avatar_bottom_sheet.dart';
 import '../../widgets/edit_email_bottom_sheet/edit_email_bottom_sheet.dart';
 import '../../widgets/edit_name_bottom_sheet/edit_name_bottom_sheet.dart';
 import '../../widgets/edit_password_bottom_sheet/edit_password_bottom_sheet.dart';
@@ -19,8 +21,12 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final courseProvider = Provider.of<CourseProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
 
     Widget _header() {
+      String picture =
+          userProvider.user?.picture ?? 'https://github.com/rocketseat.png';
+
       Widget _avatar() {
         return GestureDetector(
           onTap: () {
@@ -36,7 +42,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
-              child: Image.network('https://github.com/jpssantiago.png'),
+              child: CachedNetworkImage(imageUrl: picture, fit: BoxFit.cover),
             ),
           ),
         );
@@ -107,12 +113,14 @@ class ProfileScreen extends StatelessWidget {
     }
 
     Widget _account() {
+      String email = authProvider.email ?? '';
+
       Widget _email() {
         return ListTile(
           title: const Text('Email'),
-          subtitle: const Text(
-            'jps_santiago@outlook.com',
-            style: TextStyle(color: kPrimary),
+          subtitle: Text(
+            email,
+            style: const TextStyle(color: kPrimary),
           ),
           onTap: () {
             showEditEmailBottomSheet(context: context, onFinish: () {});
@@ -121,10 +129,12 @@ class ProfileScreen extends StatelessWidget {
       }
 
       Widget _name() {
+        String name = userProvider.user?.name ?? '';
+
         return ListTile(
           title: const Text('Nome'),
           subtitle: Text(
-            userProvider.user?.name ?? '',
+            name,
             style: const TextStyle(color: kPrimary),
           ),
           onTap: () {
@@ -170,8 +180,17 @@ class ProfileScreen extends StatelessWidget {
               title: 'Você tem certeza que deseja sair?',
               text:
                   'Você voltará para a tela de autenticação e precisará entrar com uma conta para continuar utilizando o aplicativo.',
-              onAccept: () {
+              onAccept: () async {
                 Navigator.of(context).pop();
+
+                authProvider.signOut();
+
+                await Future.delayed(const Duration(seconds: 0), () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    'welcome',
+                    (route) => false,
+                  );
+                });
               },
             );
           },
