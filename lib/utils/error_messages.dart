@@ -8,6 +8,8 @@ String treatAuthErrorMessage(String? str) {
       return 'O email informado não é válido.';
     case 'wrong-password':
       return 'A senha informada está incorreta.';
+    case 'requires-recent-login':
+      return 'Sessão expirada. Favor autenticar novamente.';
     case 'user-null':
     default:
       return 'Ocorreu um erro, tente novamente mais tarde.';

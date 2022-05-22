@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import '../models/course_model.dart';
 import '../models/edit_avatar_response.dart';
+import '../models/edit_name_response.dart';
 import '../models/user_model.dart';
 
 class UserProvider with ChangeNotifier {
@@ -62,6 +63,24 @@ class UserProvider with ChangeNotifier {
     _user!.picture = null;
 
     notifyListeners();
+  }
+
+  Future<EditNameResponse> editName(String name) async {
+    try {
+      await _database.collection('users').doc(_user?.id).update({
+        'name': name,
+      });
+
+      _user!.name = name;
+
+      notifyListeners();
+
+      return EditNameResponse(edited: true);
+    } on FirebaseException catch (e) {
+      return EditNameResponse(edited: false, error: e.code);
+    } catch (e) {
+      return EditNameResponse(edited: false, error: e.toString());
+    }
   }
 
   Future<void> loadUser({

@@ -5,14 +5,28 @@ import '../../providers/user_provider.dart';
 import '../bottom_sheet/bottom_sheet.dart';
 import '../filled_button/filled_button.dart';
 import '../filled_text_field/filled_text_field.dart';
+import '../snack_bar/snack_bar.dart';
 
-class EditNameBottomSheet extends StatelessWidget {
+class EditNameBottomSheet extends StatefulWidget {
   final Function() onFinish;
 
   const EditNameBottomSheet({
     Key? key,
     required this.onFinish,
   }) : super(key: key);
+
+  @override
+  State<EditNameBottomSheet> createState() => _EditNameBottomSheetState();
+}
+
+class _EditNameBottomSheetState extends State<EditNameBottomSheet> {
+  bool loading = false;
+
+  void setLoading(bool value) {
+    setState(() {
+      loading = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +43,31 @@ class EditNameBottomSheet extends StatelessWidget {
     Widget _button() {
       return FilledButton(
         text: 'Salvar nome',
-        // loading: loading,
-        onPressed: () {},
+        loading: loading,
+        onPressed: () async {
+          String name = controller.text;
+          if (name.isEmpty) {
+            return;
+          }
+
+          setLoading(true);
+          final response = await userProvider.editName(name);
+          setLoading(false);
+
+          if (response.edited) {
+            sendSnackBar(
+              context: context,
+              message: 'O nome foi editado.',
+            );
+          } else {
+            sendSnackBar(
+              context: context,
+              message: 'Não foi possível editar o nome.',
+            );
+          }
+
+          Navigator.of(context).pop();
+        },
       );
     }
 

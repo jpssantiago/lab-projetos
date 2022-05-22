@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../models/edit_email_response.dart';
 import '../models/google_signin_response.dart';
 import '../models/password_recovery_response.dart';
 import '../models/sign_in_response.dart';
@@ -137,6 +138,22 @@ class AuthProvider with ChangeNotifier {
       return PasswordRecoveryResponse(sent: false, error: e.code);
     } catch (e) {
       return PasswordRecoveryResponse(sent: false, error: e.toString());
+    }
+  }
+
+  Future<EditEmailResponse> editEmail(String email) async {
+    try {
+      await _auth.currentUser?.updateEmail(email);
+
+      _email = email;
+
+      notifyListeners();
+
+      return EditEmailResponse(edited: true);
+    } on FirebaseAuthException catch (e) {
+      return EditEmailResponse(edited: false, error: e.code);
+    } catch (e) {
+      return EditEmailResponse(edited: false, error: e.toString());
     }
   }
 
