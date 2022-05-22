@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../models/google_signin_response.dart';
+import '../models/sign_in_response.dart';
 
 class AuthProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -32,6 +33,28 @@ class AuthProvider with ChangeNotifier {
     });
   }
 
+  Future<SignInResponse> signIn(String email, String password) async {
+    try {
+      final credential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (credential.user == null) {
+        return SignInResponse(authenticated: false, error: 'user-not-found');
+      }
+
+      _id = credential.user!.uid;
+      _email = credential.user!.email;
+
+      return SignInResponse(authenticated: true);
+    } on FirebaseAuthException catch (e) {
+      return SignInResponse(authenticated: false, error: e.code);
+    } catch (e) {
+      return SignInResponse(authenticated: false, error: e.toString());
+    }
+  }
+
   Future<GoogleSignInResponse> signInWithGoogle() async {
     final googleSignIn = GoogleSignIn();
 
@@ -48,6 +71,13 @@ class AuthProvider with ChangeNotifier {
         final userCredential = await _auth.signInWithCredential(
           googleCredential,
         );
+
+        if (userCredential.user == null) {
+          return GoogleSignInResponse(
+            authenticated: false,
+            error: 'user-not-found',
+          );
+        }
 
         _id = userCredential.user!.uid;
         _email = userCredential.user!.email;

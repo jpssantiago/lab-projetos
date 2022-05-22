@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/auth_provider.dart';
 import '../../themes/theme.dart';
 import '../../widgets/filled_button/filled_button.dart';
 import '../../widgets/filled_text_field/filled_text_field.dart';
 import '../../widgets/show_password_text_button/show_password_text_button.dart';
+import '../../widgets/snack_bar/snack_bar.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -33,6 +36,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     AppBar _appBar() {
       return AppBar(
         title: const Text('Já tenho uma conta'),
@@ -94,7 +99,28 @@ class _SignInScreenState extends State<SignInScreen> {
       return FilledButton(
         text: 'Conectar',
         loading: loading,
-        onPressed: () async {},
+        onPressed: () async {
+          String email = emailController.text;
+          String password = passwordController.text;
+
+          if (email.isEmpty || password.isEmpty) {
+            return; // Error
+          }
+
+          setLoading(true);
+
+          final response = await authProvider.signIn(email, password);
+          if (response.authenticated) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              'main',
+              (route) => false,
+            );
+          } else {
+            sendSnackBar(context: context, message: response.error ?? '');
+          }
+
+          setLoading(false);
+        },
       );
     }
 
