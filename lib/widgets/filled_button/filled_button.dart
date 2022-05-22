@@ -33,8 +33,8 @@ class FilledButton extends StatelessWidget {
       return Text(
         text,
         style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
           color: textColor ?? kWhite,
         ),
       );

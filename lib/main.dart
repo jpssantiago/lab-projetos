@@ -11,6 +11,10 @@ import './screens/module_screen/module_screen.dart';
 import './themes/theme.dart';
 import 'providers/auth_provider.dart';
 import 'screens/module_completed_screen/module_completed_screen.dart';
+import 'screens/password_recovery_screen/password_recovery_screen.dart';
+import 'screens/password_recovery_success_screen/password_recovery_success_screen.dart';
+import 'screens/sign_in_screen/sign_in_screen.dart';
+import 'screens/sign_up_screen/sign_up_screen.dart';
 import 'screens/welcome_screen/welcome_screen.dart';
 
 void main() async {
@@ -43,6 +47,11 @@ class MyApp extends StatelessWidget {
         title: 'Lab. Projetos',
         routes: {
           'welcome': (context) => const WelcomeScreen(),
+          'sign_in': (context) => const SignInScreen(),
+          'sign_up': (context) => const SignUpScreen(),
+          'password_recovery': (context) => const PasswordRecoveryScreen(),
+          'password_recovery_success': (context) =>
+              const PasswordRecoverySuccessScreen(),
           'main': (context) => const MainScreen(),
           'module': (context) => const ModuleScreen(),
           'module_completed': (context) => const ModuleCompletedScreen(),

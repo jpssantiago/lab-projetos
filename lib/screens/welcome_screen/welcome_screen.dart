@@ -35,19 +35,32 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
-      body: Center(
-        child: TextButton(
-          child: const Text('Logar com google'),
-          onPressed: () async {
-            final response = await authProvider.signInWithGoogle();
+      body: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              child: const Text('Continuar com email'),
+              onPressed: () {
+                Navigator.of(context).pushNamed('sign_in');
+              },
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              child: const Text('Logar com google'),
+              onPressed: () async {
+                final response = await authProvider.signInWithGoogle();
 
-            if (response.authenticated) {
-              goToMain();
-            } else {
-              // [snack-bar] erro: response.error
-              // TODO: Widget de snackbar.
-            }
-          },
+                if (response.authenticated) {
+                  goToMain();
+                } else {
+                  // [snack-bar] erro: response.error
+                  // TODO: Widget de snackbar.
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
