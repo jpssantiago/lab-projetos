@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/auth_provider.dart';
+import '../../utils/error_messages.dart';
+import '../../widgets/snack_bar/snack_bar.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -55,8 +57,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 if (response.authenticated) {
                   goToMain();
                 } else {
-                  // [snack-bar] erro: response.error
-                  // TODO: Widget de snackbar.
+                  sendSnackBar(
+                      context: context,
+                      message: treatAuthErrorMessage(response.error));
                 }
               },
             ),

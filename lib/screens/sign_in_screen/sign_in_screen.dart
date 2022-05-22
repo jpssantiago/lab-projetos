@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/auth_provider.dart';
 import '../../themes/theme.dart';
+import '../../utils/error_messages.dart';
 import '../../widgets/filled_button/filled_button.dart';
 import '../../widgets/filled_text_field/filled_text_field.dart';
 import '../../widgets/show_password_text_button/show_password_text_button.dart';
@@ -104,7 +105,11 @@ class _SignInScreenState extends State<SignInScreen> {
           String password = passwordController.text;
 
           if (email.isEmpty || password.isEmpty) {
-            return; // Error
+            sendSnackBar(
+              context: context,
+              message: 'Preencha todos os campos para continuar.',
+            );
+            return;
           }
 
           setLoading(true);
@@ -116,7 +121,10 @@ class _SignInScreenState extends State<SignInScreen> {
               (route) => false,
             );
           } else {
-            sendSnackBar(context: context, message: response.error ?? '');
+            sendSnackBar(
+              context: context,
+              message: treatAuthErrorMessage(response.error),
+            );
           }
 
           setLoading(false);

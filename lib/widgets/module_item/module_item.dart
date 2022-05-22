@@ -5,6 +5,7 @@ import '../../models/course_model.dart';
 import '../../models/course_module_model.dart';
 import '../../providers/user_provider.dart';
 import '../../themes/theme.dart';
+import '../snack_bar/snack_bar.dart';
 
 class ModuleItem extends StatelessWidget {
   final CourseModuleModel module;
@@ -26,7 +27,13 @@ class ModuleItem extends StatelessWidget {
     );
 
     void handlePress() {
-      if (module.lessons.isEmpty) return; // TODO: Adicionar mensagem.
+      if (module.lessons.isEmpty) {
+        sendSnackBar(
+          context: context,
+          message: 'Este módulo não tem lições disponíveis.',
+        );
+        return;
+      }
 
       Navigator.of(context).pushNamed('module', arguments: {
         'module': module,
@@ -44,9 +51,10 @@ class ModuleItem extends StatelessWidget {
         );
       }
 
+      bool locked = module.lessons.isEmpty;
       Widget _icon() {
         return Icon(
-          module.icon,
+          locked ? Icons.lock : module.icon,
           color: kSecondaryText.withOpacity(.2),
           size: 48,
         );

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/auth_provider.dart';
 import '../../themes/theme.dart';
+import '../../utils/error_messages.dart';
 import '../../widgets/filled_button/filled_button.dart';
 import '../../widgets/filled_text_field/filled_text_field.dart';
 import '../../widgets/snack_bar/snack_bar.dart';
@@ -71,7 +72,11 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
         onPressed: () async {
           String email = emailController.text;
           if (email.isEmpty) {
-            return; // Error
+            sendSnackBar(
+              context: context,
+              message: 'Preencha todos os campos para continuar.',
+            );
+            return;
           }
 
           setLoading(true);
@@ -83,7 +88,10 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
               (route) => false,
             );
           } else {
-            sendSnackBar(context: context, message: response.error ?? '');
+            sendSnackBar(
+              context: context,
+              message: treatAuthErrorMessage(response.error),
+            );
           }
 
           setLoading(false);
