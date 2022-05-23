@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/course_module_model.dart';
@@ -17,17 +18,17 @@ class _ModuleScreenState extends State<ModuleScreen> {
   final PageController controller = PageController();
   int _currentLesson = 0;
 
-  void setCurrentLesson(int index) {
-    setState(() {
-      _currentLesson = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments;
     final map = args as Map<String, dynamic>;
     final CourseModuleModel module = map['module'] as CourseModuleModel;
+
+    void setCurrentLesson(int index) {
+      setState(() {
+        _currentLesson = index;
+      });
+    }
 
     AppBar _appBar() {
       Widget _close() {
@@ -102,6 +103,8 @@ class _ModuleScreenState extends State<ModuleScreen> {
       appBar: _appBar(),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
+        onPageChanged: setCurrentLesson,
+        dragStartBehavior: DragStartBehavior.down,
         controller: controller,
         children: _children(),
       ),
