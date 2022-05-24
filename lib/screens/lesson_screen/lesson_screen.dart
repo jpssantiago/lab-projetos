@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../models/lesson_model.dart';
 import '../../themes/theme.dart';
+import '../../widgets/quiz_option/quiz_option.dart';
 import '../../widgets/rounded_button/rounded_button.dart';
 
-class LessonScreen extends StatelessWidget {
+class LessonScreen extends StatefulWidget {
   final LessonModel lesson;
   final Function() onSubmit;
 
@@ -15,9 +16,33 @@ class LessonScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    bool hasCode = lesson.code != null && lesson.code!.isNotEmpty;
+  State<LessonScreen> createState() => _LessonScreenState();
+}
 
+class _LessonScreenState extends State<LessonScreen> {
+  String? selectedOption;
+  bool answered = false;
+
+  void setSelectedOption(String? option) {
+    if (answered) return;
+
+    setState(() {
+      if (selectedOption == option) {
+        selectedOption = null;
+      } else {
+        selectedOption = option;
+      }
+    });
+  }
+
+  void setAnswered(bool value) {
+    setState(() {
+      answered = value;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     Color background = kSecondaryText.withOpacity(.1);
     Color contrast = kSecondaryText.withOpacity(.2);
 
@@ -28,7 +53,7 @@ class LessonScreen extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.all(15),
         child: Text(
-          lesson.content?.replaceAll('\\n', '\n') ?? '',
+          widget.lesson.content.replaceAll('\\n', '\n'),
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w400,
@@ -66,13 +91,10 @@ class LessonScreen extends StatelessWidget {
       }
 
       Widget _content() {
-        String text = lesson.code ?? '';
+        String text = widget.lesson.code ?? '';
 
         return Container(
           width: double.infinity,
-          // constraints: const BoxConstraints(
-          //   minHeight: 100,
-          // ),
           padding: const EdgeInsets.all(15),
           color: background,
           child: Text(
@@ -97,20 +119,98 @@ class LessonScreen extends StatelessWidget {
     }
 
     Widget _buildBody() {
-      return Column(
-        children: [
-          _buildContent(),
-          hasCode ? const SizedBox(height: 20) : Container(),
-          hasCode ? _buildCode() : Container(),
-        ],
+      Widget _options() {
+        List<Widget> children = [];
+
+        for (String option in widget.lesson.options!) {
+          children.add(QuizOption(
+            option: option,
+            onPress: setSelectedOption,
+            selected: selectedOption == option,
+            correctOption: widget.lesson.correctOption == option,
+            showAnswer: answered,
+          ));
+        }
+
+        return Column(children: children);
+      }
+
+      return Expanded(
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          children: [
+            _buildContent(),
+            widget.lesson.hasCode ? const SizedBox(height: 20) : Container(),
+            widget.lesson.hasCode ? _buildCode() : Container(),
+            widget.lesson.hasCode && widget.lesson.isQuiz
+                ? const SizedBox(height: 30)
+                : Container(),
+            widget.lesson.isQuiz ? _options() : Container(),
+          ],
+        ),
       );
     }
 
-    Widget _nextButton() {
-      return RoundedButton(
-        text: 'Continuar',
-        onPress: onSubmit,
-      );
+    Widget _button() {
+      Widget _nextButton() {
+        return RoundedButton(
+          text: 'Continuar',
+          onPress: widget.onSubmit,
+        );
+      }
+
+      Widget _submitButton() {
+        return RoundedButton(
+          text: 'Verificar',
+          disabled: selectedOption == null,
+          onPress: () {
+            if (selectedOption == null) return;
+
+            setAnswered(true);
+          },
+        );
+      }
+
+      Widget _skipButton() {
+        return Expanded(
+          child: RoundedButton(
+            text: 'Pular',
+            outlined: true,
+            onPress: widget.onSubmit,
+          ),
+        );
+      }
+
+      Widget _retryButton() {
+        return Expanded(
+          child: RoundedButton(
+            text: 'Tentar de novo',
+            onPress: () {
+              setSelectedOption(null);
+              setAnswered(false);
+            },
+          ),
+        );
+      }
+
+      if (widget.lesson.isQuiz) {
+        if (answered) {
+          if (widget.lesson.correctOption != selectedOption) {
+            return Row(
+              children: [
+                _skipButton(),
+                _retryButton(),
+              ],
+            );
+          }
+
+          return _nextButton();
+        }
+
+        return _submitButton();
+      }
+
+      return _nextButton();
     }
 
     return Column(
@@ -118,7 +218,7 @@ class LessonScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _buildBody(),
-        _nextButton(),
+        _button(),
       ],
     );
   }
