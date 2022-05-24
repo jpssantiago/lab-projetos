@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../models/course_model.dart';
 import '../../themes/theme.dart';
-import '../course_details_bottom_sheet/course_details_bottom_sheet.dart';
 
 class ProfileCourseProgress extends StatelessWidget {
   final CourseModel course;
@@ -74,23 +73,18 @@ class ProfileCourseProgress extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: GestureDetector(
-        onTap: () {
-          showCourseDetailsBottomSheet(context: context, course: course);
-        },
-        child: Container(
-          color: kWhite,
-          height: 70,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _image(),
-              const SizedBox(width: 15),
-              _courseName(),
-              const Spacer(),
-              _progress(),
-            ],
-          ),
+      child: Container(
+        color: kWhite,
+        height: 70,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _image(),
+            const SizedBox(width: 15),
+            _courseName(),
+            const Spacer(),
+            _progress(),
+          ],
         ),
       ),
     );

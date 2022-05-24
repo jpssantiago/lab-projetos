@@ -18,5 +18,7 @@ class CourseProvider with ChangeNotifier {
       final data = doc.data();
       _courses.add(CourseModel.fromMap(id: doc.id, map: data));
     }
+
+    notifyListeners();
   }
 }

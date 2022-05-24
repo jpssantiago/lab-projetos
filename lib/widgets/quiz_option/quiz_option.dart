@@ -40,12 +40,14 @@ class QuizOption extends StatelessWidget {
         return selected ? kPrimary : kSecondaryText;
       }
 
-      return Text(
-        option,
-        style: TextStyle(
-          color: _color(),
-          fontSize: 16,
-          fontWeight: FontWeight.normal,
+      return Expanded(
+        child: Text(
+          option,
+          style: TextStyle(
+            color: _color(),
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+          ),
         ),
       );
     }
@@ -67,7 +69,7 @@ class QuizOption extends StatelessWidget {
         }
       }
 
-      return Container();
+      return const SizedBox(width: 24, height: 24);
     }
 
     Border _border() {
@@ -97,16 +99,15 @@ class QuizOption extends StatelessWidget {
       child: TextButton(
         child: Container(
           width: double.infinity,
-          height: 45,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             border: _border(),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.all(15),
           child: Row(
             children: [
               _text(),
-              const Spacer(),
+              const SizedBox(width: 10),
               _result(),
             ],
           ),
