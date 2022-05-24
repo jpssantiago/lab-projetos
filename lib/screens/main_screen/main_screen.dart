@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/auth_provider.dart';
+import '../../providers/course_provider.dart';
+import '../../providers/user_provider.dart';
 import '../home_screen/home_screen.dart';
+import '../profile_screen/profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -18,12 +23,50 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  void loadData() async {
+    final authProvider = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    );
+
+    if (!authProvider.hasUser()) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        'welcome',
+        (route) => false,
+      );
+    }
+
+    final courseProvider = Provider.of<CourseProvider>(
+      context,
+      listen: false,
+    );
+
+    await courseProvider.loadCourses();
+
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    await userProvider.loadUser(
+      id: authProvider.id!,
+      courses: courseProvider.courses,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadData();
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
       const HomeScreen(),
       Container(color: Colors.grey),
-      Container(color: Colors.grey.withOpacity(.2)),
+      const ProfileScreen(),
     ];
 
     BottomNavigationBar _bottomNavigationBar() {

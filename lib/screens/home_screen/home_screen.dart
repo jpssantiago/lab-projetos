@@ -3,38 +3,13 @@ import 'package:provider/provider.dart';
 
 import '../../providers/course_provider.dart';
 import '../../providers/user_provider.dart';
-import '../../widgets/app_bar_button.dart';
+import '../../widgets/app_bar_button/app_bar_button.dart';
+import '../../widgets/select_course_bottom_sheet/select_course_bottom_sheet.dart';
 import '../../themes/theme.dart';
+import '../../widgets/module_item/module_item.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  void loadData() async {
-    final courseProvider = Provider.of<CourseProvider>(
-      context,
-      listen: false,
-    );
-
-    final userProvider = Provider.of<UserProvider>(
-      context,
-      listen: false,
-    );
-
-    await courseProvider.loadCourses();
-    await userProvider.loadUser(courseProvider.courses);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    loadData();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           onPressed: () {
             if (loading) return;
-            // TODO: Abrir bottom sheet para escolher curso.
+
+            showSelectCourseBottomSheet(context: context);
           },
         );
       }
@@ -83,7 +59,37 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     Widget _listView() {
-      return ListView();
+      if (userProvider.selectedCourse == null) {
+        return Container();
+      }
+
+      Future<void> onRefresh() async {
+        final courseProvider = Provider.of<CourseProvider>(
+          context,
+          listen: false,
+        );
+
+        await courseProvider.loadCourses();
+        await userProvider.loadUser(
+          id: userProvider.user!.id,
+          courses: courseProvider.courses,
+        );
+      }
+
+      return RefreshIndicator(
+        onRefresh: onRefresh,
+        child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemCount: userProvider.selectedCourse?.modules.length,
+          itemBuilder: (context, index) {
+            return ModuleItem(
+              module: userProvider.selectedCourse!.modules[index],
+              course: userProvider.selectedCourse!,
+              locked: index > 0,
+            );
+          },
+        ),
+      );
     }
 
     return Scaffold(
