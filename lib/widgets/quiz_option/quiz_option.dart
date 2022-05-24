@@ -112,7 +112,7 @@ class QuizOption extends StatelessWidget {
             ],
           ),
         ),
-        onPressed: () => onPress(option), // TODO: Som de erro/acerto ???
+        onPressed: () => onPress(option),
         style: ButtonStyle(
           padding: MaterialStateProperty.all(EdgeInsets.zero),
           elevation: MaterialStateProperty.all(.5),
