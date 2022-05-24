@@ -10,13 +10,13 @@ import '../snack_bar/snack_bar.dart';
 class ModuleItem extends StatelessWidget {
   final CourseModuleModel module;
   final CourseModel course;
-  final bool locked;
+  final bool showSteps;
 
   const ModuleItem({
     Key? key,
     required this.module,
     required this.course,
-    required this.locked,
+    required this.showSteps,
   }) : super(key: key);
 
   @override
@@ -99,13 +99,39 @@ class ModuleItem extends StatelessWidget {
       );
     }
 
+    Widget _steps() {
+      Widget _step() {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: kSecondaryText.withOpacity(.2),
+              shape: BoxShape.circle,
+            ),
+          ),
+        );
+      }
+
+      return Column(
+        children: [
+          _step(),
+          _step(),
+          _step(),
+        ],
+      );
+    }
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 40),
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
           _progress(),
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
           _moduleName(),
+          showSteps ? const SizedBox(height: 35) : Container(),
+          showSteps ? _steps() : Container(),
         ],
       ),
     );

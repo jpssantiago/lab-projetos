@@ -82,10 +82,12 @@ class HomeScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           itemCount: userProvider.selectedCourse?.modules.length,
           itemBuilder: (context, index) {
+            final modules = userProvider.selectedCourse?.modules;
+
             return ModuleItem(
-              module: userProvider.selectedCourse!.modules[index],
+              module: modules![index],
               course: userProvider.selectedCourse!,
-              locked: index > 0,
+              showSteps: index < modules.length - 1,
             );
           },
         ),
