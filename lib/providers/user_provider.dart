@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/models/course_module_model.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -18,6 +19,15 @@ class UserProvider with ChangeNotifier {
 
   CourseModel? get selectedCourse => _selectedCourse;
   UserModel? get user => _user;
+
+  void setModuleCompleted(CourseModel? course, CourseModuleModel module) {
+    _user?.addCourseToSavedOnes(course!);
+    _user?.setCompletedModule(module);
+
+    // TODO: Salvar no firebase.
+
+    notifyListeners();
+  }
 
   void setSelectedCourse(CourseModel course) {
     _selectedCourse = course;

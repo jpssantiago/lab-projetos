@@ -17,6 +17,29 @@ class UserModel {
     this.picture,
   });
 
+  void addCourseToSavedOnes(CourseModel course) {
+    for (UserCourseProgress c in myCourses) {
+      if (c.course.id == course.id) {
+        return;
+      }
+    }
+
+    myCourses.add(UserCourseProgress(
+      course: course,
+      completedModules: [],
+    ));
+  }
+
+  void setCompletedModule(CourseModuleModel module) {
+    // for (UserCourseProgress c in myCourses) {
+    //   for (CourseModuleModel m in c.course.modules) {
+    //     if (m.id == module.id) {
+    //       c.completedModules.add(module);
+    //     }
+    //   }
+    // }
+  }
+
   bool hasStartedCourse(CourseModel course) {
     for (UserCourseProgress c in myCourses) {
       if (c.course.id == course.id) {
@@ -36,9 +59,13 @@ class UserModel {
   }
 
   double getModuleProgress(CourseModel course, CourseModuleModel module) {
-    if (hasStartedCourse(course)) {
-      if (module.lessons.isNotEmpty) {
-        return Random().nextDouble();
+    for (UserCourseProgress c in myCourses) {
+      if (c.course.id == course.id) {
+        for (var m in c.completedModules) {
+          if (m.id == module.id) {
+            return 100;
+          }
+        }
       }
     }
 

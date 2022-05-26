@@ -1,8 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/course_module_model.dart';
 import '../../models/lesson_model.dart';
+import '../../providers/course_provider.dart';
+import '../../providers/user_provider.dart';
 import '../../themes/theme.dart';
 import '../../widgets/alert_dialog/alert_dialog.dart';
 import '../lesson_screen/lesson_screen.dart';
@@ -24,6 +27,16 @@ class _ModuleScreenState extends State<ModuleScreen> {
     final map = args as Map<String, dynamic>;
     final CourseModuleModel module = map['module'] as CourseModuleModel;
 
+    final courseProvider = Provider.of<CourseProvider>(
+      context,
+      listen: false,
+    );
+
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
     void setCurrentLesson(int index) {
       setState(() {
         _currentLesson = index;
@@ -39,7 +52,7 @@ class _ModuleScreenState extends State<ModuleScreen> {
               context: context,
               title: 'Você tem certeza que deseja sair?',
               text:
-                  'O seu progresso será salvo até esse ponto. Você poderá continuar de onde parou quando quiser.',
+                  'O seu progresso não será salvo até você concluir todas as lições do módulo.',
               onAccept: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
@@ -80,9 +93,13 @@ class _ModuleScreenState extends State<ModuleScreen> {
           curve: Curves.ease,
         );
       } else {
+        final course = courseProvider.getCourseByModule(module);
+        userProvider.setModuleCompleted(course, module);
+
         Navigator.of(context).pushNamedAndRemoveUntil(
           'module_completed',
           (route) => false,
+          arguments: module,
         );
       }
     }

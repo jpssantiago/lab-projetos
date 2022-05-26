@@ -26,6 +26,9 @@ class ModuleItem extends StatelessWidget {
       listen: false,
     );
 
+    double progress = userProvider.user?.getModuleProgress(course, module) ?? 0;
+    bool completed = progress == 100;
+
     void handlePress() {
       if (module.lessons.isEmpty) {
         sendSnackBar(
@@ -55,7 +58,7 @@ class ModuleItem extends StatelessWidget {
       Widget _icon() {
         return Icon(
           locked ? Icons.lock : module.icon,
-          color: kSecondaryText.withOpacity(.2),
+          color: completed ? kPrimary : kSecondaryText.withOpacity(.2),
           size: 48,
         );
       }
@@ -107,7 +110,7 @@ class ModuleItem extends StatelessWidget {
             width: 8,
             height: 8,
             decoration: BoxDecoration(
-              color: kSecondaryText.withOpacity(.2),
+              color: completed ? kPrimary : kSecondaryText.withOpacity(.2),
               shape: BoxShape.circle,
             ),
           ),

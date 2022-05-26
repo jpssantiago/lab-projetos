@@ -1,13 +1,31 @@
 import 'course_model.dart';
+import 'course_module_model.dart';
 
 class UserCourseProgress {
   CourseModel course;
-  // List<UserModuleProgress> modules;
+  List<CourseModuleModel> completedModules;
 
   UserCourseProgress({
     required this.course,
-    // required this.modules,
+    required this.completedModules,
   });
+
+  static List<CourseModuleModel> getModules(
+    CourseModel course,
+    List<dynamic> list,
+  ) {
+    List<CourseModuleModel> modules = [];
+
+    for (var item in list) {
+      for (CourseModuleModel module in course.modules) {
+        if (module.id == item) {
+          modules.add(module);
+        }
+      }
+    }
+
+    return modules;
+  }
 
   static Future<UserCourseProgress> fromMap(dynamic map) async {
     final doc = await map['course_id'].get();
@@ -17,7 +35,7 @@ class UserCourseProgress {
 
     return UserCourseProgress(
       course: course,
-      // modules: UserModuleProgress.fromMapList(course, map['course_progress']),
+      completedModules: getModules(course, map['completed_modules']),
     );
   }
 }

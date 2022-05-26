@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/course_model.dart';
+import '../models/course_module_model.dart';
 
 class CourseProvider with ChangeNotifier {
   final FirebaseFirestore _database = FirebaseFirestore.instance;
@@ -9,6 +10,18 @@ class CourseProvider with ChangeNotifier {
   List<CourseModel> _courses = [];
 
   List<CourseModel> get courses => _courses;
+
+  CourseModel? getCourseByModule(CourseModuleModel module) {
+    for (CourseModel course in _courses) {
+      for (CourseModuleModel m in course.modules) {
+        if (m.id == module.id) {
+          return course;
+        }
+      }
+    }
+
+    return null;
+  }
 
   Future<void> loadCourses() async {
     _courses = [];
