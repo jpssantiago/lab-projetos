@@ -1,11 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../models/course_module_model.dart';
 import '../../models/lesson_model.dart';
-import '../../providers/course_provider.dart';
-import '../../providers/user_provider.dart';
 import '../../themes/theme.dart';
 import '../../widgets/alert_dialog/alert_dialog.dart';
 import '../lesson_screen/lesson_screen.dart';
@@ -26,16 +23,6 @@ class _ModuleScreenState extends State<ModuleScreen> {
     final args = ModalRoute.of(context)!.settings.arguments;
     final map = args as Map<String, dynamic>;
     final CourseModuleModel module = map['module'] as CourseModuleModel;
-
-    final courseProvider = Provider.of<CourseProvider>(
-      context,
-      listen: false,
-    );
-
-    final userProvider = Provider.of<UserProvider>(
-      context,
-      listen: false,
-    );
 
     void setCurrentLesson(int index) {
       setState(() {
@@ -83,7 +70,7 @@ class _ModuleScreenState extends State<ModuleScreen> {
       );
     }
 
-    void handleSubmit() {
+    void handleSubmit() async {
       if (_currentLesson + 1 < module.lessons.length) {
         setCurrentLesson(_currentLesson + 1);
 
@@ -93,9 +80,6 @@ class _ModuleScreenState extends State<ModuleScreen> {
           curve: Curves.ease,
         );
       } else {
-        final course = courseProvider.getCourseByModule(module);
-        userProvider.setModuleCompleted(course, module);
-
         Navigator.of(context).pushNamedAndRemoveUntil(
           'module_completed',
           (route) => false,

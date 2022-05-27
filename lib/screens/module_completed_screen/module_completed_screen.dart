@@ -1,16 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/course_module_model.dart';
+import '../../providers/course_provider.dart';
+import '../../providers/user_provider.dart';
 import '../../themes/theme.dart';
 import '../../widgets/rounded_button/rounded_button.dart';
 
-class ModuleCompletedScreen extends StatelessWidget {
+class ModuleCompletedScreen extends StatefulWidget {
   const ModuleCompletedScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ModuleCompletedScreen> createState() => _ModuleCompletedScreenState();
+}
+
+class _ModuleCompletedScreenState extends State<ModuleCompletedScreen> {
+  bool loading = false;
+
+  void setLoading(bool value) {
+    setState(() {
+      loading = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments;
     final module = args as CourseModuleModel;
+
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    final courseProvider = Provider.of<CourseProvider>(
+      context,
+      listen: false,
+    );
 
     Widget _icon() {
       return Container(
@@ -59,10 +85,19 @@ class ModuleCompletedScreen extends StatelessWidget {
     Widget _backToHome() {
       return RoundedButton(
         text: 'Voltar ao início',
-        onPress: () => Navigator.of(context).pushNamedAndRemoveUntil(
-          'main',
-          (route) => false,
-        ),
+        loading: loading,
+        onPress: () async {
+          final course = courseProvider.getCourseByModule(module);
+
+          setLoading(true);
+          await userProvider.setModuleCompleted(course, module);
+          setLoading(false);
+
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            'main',
+            (route) => false,
+          );
+        },
       );
     }
 

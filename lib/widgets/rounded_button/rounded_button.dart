@@ -7,6 +7,7 @@ class RoundedButton extends StatelessWidget {
   final Function() onPress;
   final bool? disabled;
   final bool? outlined;
+  final bool? loading;
 
   const RoundedButton({
     Key? key,
@@ -14,10 +15,38 @@ class RoundedButton extends StatelessWidget {
     required this.onPress,
     this.disabled,
     this.outlined,
+    this.loading,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Widget _child() {
+      if (loading ?? false) {
+        return const Center(
+          child: SizedBox(
+            width: 24,
+            height: 24,
+            child: CircularProgressIndicator(
+              color: kWhite,
+            ),
+          ),
+        );
+      }
+
+      return Center(
+        child: Text(
+          text,
+          style: TextStyle(
+            color: outlined ?? false ? kPrimary : kWhite,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.1,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Container(
@@ -30,22 +59,12 @@ class RoundedButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
         ),
         child: TextButton(
-          onPressed: disabled ?? false ? () {} : onPress,
+          onPressed:
+              ((loading ?? false) || (disabled ?? false)) ? () {} : onPress,
           child: SizedBox(
             height: 35,
             width: double.infinity,
-            child: Center(
-              child: Text(
-                text,
-                style: TextStyle(
-                  color: outlined ?? false ? kPrimary : kWhite,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.1,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
+            child: _child(),
           ),
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(

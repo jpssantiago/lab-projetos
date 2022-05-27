@@ -20,11 +20,20 @@ class UserProvider with ChangeNotifier {
   CourseModel? get selectedCourse => _selectedCourse;
   UserModel? get user => _user;
 
-  void setModuleCompleted(CourseModel? course, CourseModuleModel module) {
+  Future<void> saveUserProgress() async {
+    await _database.collection('users').doc(_user!.id).update({
+      'my_courses': _user!.progressToMapList(),
+    });
+  }
+
+  Future<void> setModuleCompleted(
+    CourseModel? course,
+    CourseModuleModel module,
+  ) async {
     _user?.addCourseToSavedOnes(course!);
     _user?.setCompletedModule(module);
 
-    // TODO: Salvar no firebase.
+    await saveUserProgress();
 
     notifyListeners();
   }

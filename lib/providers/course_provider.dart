@@ -29,7 +29,11 @@ class CourseProvider with ChangeNotifier {
     final collection = await _database.collection('courses').get();
     for (var doc in collection.docs) {
       final data = doc.data();
-      _courses.add(CourseModel.fromMap(id: doc.id, map: data));
+      _courses.add(CourseModel.fromMap(
+        id: doc.id,
+        map: data,
+        ref: doc.reference,
+      ));
     }
 
     notifyListeners();

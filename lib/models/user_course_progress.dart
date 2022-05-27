@@ -31,7 +31,11 @@ class UserCourseProgress {
     final doc = await map['course_id'].get();
     final data = await doc.data();
 
-    CourseModel course = CourseModel.fromMap(id: doc.id, map: data);
+    CourseModel course = CourseModel.fromMap(
+      id: doc.id,
+      map: data,
+      ref: doc.reference,
+    );
 
     return UserCourseProgress(
       course: course,
