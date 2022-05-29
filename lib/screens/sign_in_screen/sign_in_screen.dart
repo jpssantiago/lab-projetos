@@ -160,6 +160,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
     return Scaffold(
       appBar: _appBar(),
+      backgroundColor: kWhite,
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

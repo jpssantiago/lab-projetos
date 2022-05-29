@@ -101,6 +101,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
 
     return Scaffold(
       appBar: _appBar(),
+      backgroundColor: kWhite,
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

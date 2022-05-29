@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'course_model.dart';
 import 'course_module_model.dart';
 import 'user_course_progress.dart';

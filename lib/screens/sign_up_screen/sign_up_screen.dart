@@ -220,6 +220,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     return Scaffold(
       appBar: _appBar(),
+      backgroundColor: kWhite,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: SizedBox(

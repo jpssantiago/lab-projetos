@@ -62,6 +62,7 @@ class PasswordRecoverySuccessScreen extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: kWhite,
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

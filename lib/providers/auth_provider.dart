@@ -98,7 +98,7 @@ class AuthProvider with ChangeNotifier {
 
     return GoogleSignInResponse(
       authenticated: false,
-      error: '',
+      error: 'user-cancelled',
     );
   }
 
