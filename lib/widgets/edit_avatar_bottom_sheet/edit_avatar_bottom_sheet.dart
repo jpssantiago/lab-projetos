@@ -102,13 +102,20 @@ class _EditAvatarBottomSheetState extends State<EditAvatarBottomSheet> {
           }
 
           setLoading(true);
-          await userProvider.removePicture();
+          final response = await userProvider.removePicture();
           setLoading(false);
 
-          sendSnackBar(
-            context: context,
-            message: 'A sua foto de perfil foi removida.',
-          );
+          if (response.removed) {
+            sendSnackBar(
+              context: context,
+              message: 'A sua foto de perfil foi removida.',
+            );
+          } else {
+            sendSnackBar(
+              context: context,
+              message: 'Não foi possível remover a sua foto de perfil.',
+            );
+          }
 
           Navigator.of(context).pop();
         },

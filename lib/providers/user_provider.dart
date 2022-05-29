@@ -8,6 +8,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../models/course_model.dart';
 import '../models/edit_avatar_response.dart';
 import '../models/edit_name_response.dart';
+import '../models/remove_avatar_response.dart';
+import '../models/save_user_progress_response.dart';
 import '../models/user_model.dart';
 
 class UserProvider with ChangeNotifier {
@@ -20,22 +22,38 @@ class UserProvider with ChangeNotifier {
   CourseModel? get selectedCourse => _selectedCourse;
   UserModel? get user => _user;
 
-  Future<void> saveUserProgress() async {
-    await _database.collection('users').doc(_user!.id).update({
-      'my_courses': _user!.progressToMapList(),
-    });
+  Future<SaveUserProgressResponse> saveUserProgress() async {
+    try {
+      await _database.collection('users').doc(_user!.id).update({
+        'my_courses': _user!.progressToMapList(),
+      });
+
+      return SaveUserProgressResponse(saved: true);
+    } on FirebaseException catch (e) {
+      return SaveUserProgressResponse(
+        saved: false,
+        error: e.code,
+      );
+    } catch (e) {
+      return SaveUserProgressResponse(
+        saved: false,
+        error: e.toString(),
+      );
+    }
   }
 
-  Future<void> setModuleCompleted(
+  Future<SaveUserProgressResponse> setModuleCompleted(
     CourseModel? course,
     CourseModuleModel module,
   ) async {
     _user?.addCourseToSavedOnes(course!);
     _user?.setCompletedModule(module);
 
-    await saveUserProgress();
+    final response = await saveUserProgress();
 
     notifyListeners();
+
+    return response;
   }
 
   void setSelectedCourse(CourseModel course) {
@@ -74,14 +92,28 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<void> removePicture() async {
-    await _database.collection('users').doc(_user?.id).update({
-      'picture': null,
-    });
+  Future<RemoveAvatarResponse> removePicture() async {
+    try {
+      await _database.collection('users').doc(_user?.id).update({
+        'picture': null,
+      });
 
-    _user!.picture = null;
+      _user!.picture = null;
 
-    notifyListeners();
+      notifyListeners();
+
+      return RemoveAvatarResponse(removed: true);
+    } on FirebaseException catch (e) {
+      return RemoveAvatarResponse(
+        removed: false,
+        error: e.code,
+      );
+    } catch (e) {
+      return RemoveAvatarResponse(
+        removed: false,
+        error: e.toString(),
+      );
+    }
   }
 
   Future<EditNameResponse> editName(String name) async {

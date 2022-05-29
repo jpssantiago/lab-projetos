@@ -6,6 +6,7 @@ import '../../providers/course_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../themes/theme.dart';
 import '../../widgets/rounded_button/rounded_button.dart';
+import '../../widgets/snack_bar/snack_bar.dart';
 
 class ModuleCompletedScreen extends StatefulWidget {
   const ModuleCompletedScreen({Key? key}) : super(key: key);
@@ -90,13 +91,25 @@ class _ModuleCompletedScreenState extends State<ModuleCompletedScreen> {
           final course = courseProvider.getCourseByModule(module);
 
           setLoading(true);
-          await userProvider.setModuleCompleted(course, module);
-          setLoading(false);
 
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            'main',
-            (route) => false,
+          final response = await userProvider.setModuleCompleted(
+            course,
+            module,
           );
+
+          if (response.saved) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              'main',
+              (route) => false,
+            );
+          } else {
+            sendSnackBar(
+              context: context,
+              message: 'Ocorreu um erro ao salvar o seu progresso.',
+            );
+          }
+
+          setLoading(false);
         },
       );
     }
