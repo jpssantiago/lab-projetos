@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/course_model.dart';
 import '../../models/course_module_model.dart';
 import '../../models/lesson_model.dart';
 import '../../themes/theme.dart';
@@ -23,6 +24,7 @@ class _ModuleScreenState extends State<ModuleScreen> {
     final args = ModalRoute.of(context)!.settings.arguments;
     final map = args as Map<String, dynamic>;
     final CourseModuleModel module = map['module'] as CourseModuleModel;
+    final CourseModel course = map['course'] as CourseModel;
 
     void setCurrentLesson(int index) {
       setState(() {
@@ -93,7 +95,11 @@ class _ModuleScreenState extends State<ModuleScreen> {
 
       for (LessonModel lesson in module.lessons) {
         children.add(
-          LessonScreen(lesson: lesson, onSubmit: handleSubmit),
+          LessonScreen(
+            lesson: lesson,
+            course: course,
+            onSubmit: handleSubmit,
+          ),
         );
       }
 

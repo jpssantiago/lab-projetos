@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../models/course_model.dart';
 import '../../models/lesson_model.dart';
 import '../../themes/theme.dart';
 import '../../widgets/quiz_option/quiz_option.dart';
@@ -7,11 +8,13 @@ import '../../widgets/rounded_button/rounded_button.dart';
 
 class LessonScreen extends StatefulWidget {
   final LessonModel lesson;
+  final CourseModel course;
   final Function() onSubmit;
 
   const LessonScreen({
     Key? key,
     required this.lesson,
+    required this.course,
     required this.onSubmit,
   }) : super(key: key);
 
@@ -69,9 +72,9 @@ class _LessonScreenState extends State<LessonScreen> {
           width: double.infinity,
           color: background,
           padding: const EdgeInsets.all(15),
-          child: const Text(
-            'script.py',
-            style: TextStyle(
+          child: Text(
+            widget.course.fileName ?? '',
+            style: const TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.bold,
               color: kSecondaryText,

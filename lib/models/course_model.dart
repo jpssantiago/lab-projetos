@@ -8,6 +8,7 @@ class CourseModel {
   String logo;
   List<CourseModuleModel> modules;
   DocumentReference ref;
+  String? fileName;
 
   CourseModel({
     required this.id,
@@ -15,6 +16,7 @@ class CourseModel {
     required this.logo,
     required this.modules,
     required this.ref,
+    this.fileName,
   });
 
   static CourseModel fromMap({
@@ -28,6 +30,7 @@ class CourseModel {
       logo: map['logo'],
       modules: CourseModuleModel.fromMapList(map['modules']),
       ref: ref,
+      fileName: map['file_name'],
     );
   }
 }

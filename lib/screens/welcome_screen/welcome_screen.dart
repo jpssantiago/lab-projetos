@@ -57,7 +57,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     Widget _title() {
       return const Text(
-        'Lorem ipsum dolor',
+        'Aprenda programação do seu celular',
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
@@ -69,7 +69,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     Widget _subtitle() {
       return const Text(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sem ante, rutrum vitae nibh sit amet.',
+        'Desenvolva suas habilidades em programação com lições intuitivas, exemplos em código e questionários... Uma linha de cada vez.',
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.normal,
