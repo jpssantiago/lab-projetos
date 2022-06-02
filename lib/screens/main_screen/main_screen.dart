@@ -65,7 +65,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
       const HomeScreen(),
-      Container(color: Colors.grey),
       const ProfileScreen(),
     ];
 
@@ -73,13 +72,6 @@ class _MainScreenState extends State<MainScreen> {
       BottomNavigationBarItem _learn() {
         return const BottomNavigationBarItem(
           icon: Icon(Icons.school, size: 30),
-          label: '',
-        );
-      }
-
-      BottomNavigationBarItem _courses() {
-        return const BottomNavigationBarItem(
-          icon: Icon(Icons.bookmark, size: 30),
           label: '',
         );
       }
@@ -94,7 +86,6 @@ class _MainScreenState extends State<MainScreen> {
       return BottomNavigationBar(
         items: [
           _learn(),
-          _courses(),
           _profile(),
         ],
         currentIndex: currentIndex,
