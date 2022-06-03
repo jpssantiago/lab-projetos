@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AuthProvider()),
       ],
       child: MaterialApp(
-        title: 'Lab. Projetos',
+        title: 'One Byte',
         routes: {
           'welcome': (context) => const WelcomeScreen(),
           'sign_in': (context) => const SignInScreen(),
